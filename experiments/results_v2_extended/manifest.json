@@ -1,0 +1,49 @@
+{
+  "archive_checks": {
+    "assignments.jsonl": "46ef91240ea15d1805367d7cfa38b2332ee425f5f6b9b37ff9d710e1f5590e5e",
+    "case_metrics.csv": "94ec88b55493dd2a251887c2f26c4d4b6ea1400a187b1503b54a76f5d133af19",
+    "config.json": "f7d023b071cbbead891b734e855bf5dd710cba007f764ef79379448e8dc45c09",
+    "inputs.jsonl": "5c31cfbbdded7fb73cd6e039fd36bc80abf73372bfa50e20e8d6afe6770ca076"
+  },
+  "archive_manifest_sha256": "6768b4d4e190c7ddb110657ca93f343ac64ae5287b065144da6586566e54e0c8",
+  "archived_result_equivalence_checks": 10080,
+  "completed_utc": "2026-11-08T20:18:06.463859+00:00",
+  "config_sha256": "65dbf32a4566c93117db19355687c5057b9812ab0c412fde68fb2b359a0f175a",
+  "cpu": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+  "database_access": false,
+  "engine_sha256": "b24065f436c7a3048b5f3806e6efd258bfb7a97063ffa5b4ed99ca1a875a1d7b",
+  "history_aggregation_in_timing": false,
+  "independent_scenario_count": 1440,
+  "inputs_sha256": "5c31cfbbdded7fb73cd6e039fd36bc80abf73372bfa50e20e8d6afe6770ca076",
+  "logical_cpu_count": 20,
+  "measured_planner_calls": 34560,
+  "metric_rows": 11520,
+  "outputs_sha256": {
+    "assignments.jsonl": "c188ba94f43c0bc860d537a5672beb984dc1e3b9fbb1f73b5dc4faa6fe495ada",
+    "case_metrics.csv": "bb8a97a29c3330ed5b13f6a27e647651adac6b8572e5579edad94f6d6bb5884c",
+    "descriptive_summary.csv": "6e04586ae9125a2127b75b7fd74f99c2b786f7454185145850acc4dbe7eb448c",
+    "inputs.jsonl": "5c31cfbbdded7fb73cd6e039fd36bc80abf73372bfa50e20e8d6afe6770ca076",
+    "source_snapshot/recommender.py": "b24065f436c7a3048b5f3806e6efd258bfb7a97063ffa5b4ed99ca1a875a1d7b",
+    "source_snapshot/run_extended_comparison.py": "acc58de51168845e3587ce19ab6b85f0003237c0679dfad144ed525d7b12374f"
+  },
+  "paired_methods_on_identical_inputs": true,
+  "parameter_tuning": false,
+  "platform": "Windows-10-10.0.19045-SP0",
+  "python": "3.13.2 (tags/v3.13.2:4f8bb39, Feb  4 2025, 15:23:48) [MSC v.1942 64 bit (AMD64)]",
+  "scenario_count": 1440,
+  "schema_version": "2.1-extension",
+  "script_sha256": "acc58de51168845e3587ce19ab6b85f0003237c0679dfad144ed525d7b12374f",
+  "source_engine_sha256": "660346db68d01f874bd53a69dbc492ff4edc679307538c69ed90c2274b26fa7e",
+  "sources_sha256": {
+    "experiments/frozen_v1/recommender.py": "a22a28e487a39ad0fab190a3e8d7c04208e2f10399cf2cbea6c4aa3201fbaa84",
+    "experiments/frozen_v2/recommender.py": "660346db68d01f874bd53a69dbc492ff4edc679307538c69ed90c2274b26fa7e",
+    "experiments/protocol_v2_extended.md": "3e5203a20889950aa17995f4c0aefc5394e4389cd225e0c746c836252d3dbd0b",
+    "experiments/run_comparison.py": "998de148e54920f632fee302cb1f171e45eaaba9c88b0981b3ef6d68315dd2e7",
+    "experiments/run_recency_comparison.py": "a22d67120c825304c00332899926e2ddc13ca7e0b06c249f429b2f155ec40feb"
+  },
+  "started_utc": "2026-11-08T20:16:23.341417+00:00",
+  "status": "complete",
+  "total_violations": 0,
+  "wall_time_seconds": 103.12246780004352,
+  "warmup_planner_calls": 8
+}

@@ -1,0 +1,150 @@
+{
+  "capacity_minutes": 960,
+  "categories": 3,
+  "conditions": [
+    "stable",
+    "no_time_effect",
+    "drift"
+  ],
+  "daily_busy": [
+    [
+      "12:00",
+      "12:30"
+    ],
+    [
+      "15:00",
+      "15:30"
+    ]
+  ],
+  "daily_window": [
+    "09:00",
+    "18:00"
+  ],
+  "days": 2,
+  "deadline": {
+    "missing_probability": 0.2,
+    "rule": "min(last_window_end, effective_release + allocated_duration + slack)",
+    "slack_minutes_uniform": [
+      0,
+      30,
+      60,
+      120,
+      240,
+      480,
+      960
+    ]
+  },
+  "durations_minutes": [
+    20,
+    30,
+    40,
+    60,
+    90,
+    120
+  ],
+  "earliest_start": {
+    "first_day_probability_if_present": 0.6666666666666666,
+    "missing_probability": 0.4,
+    "quarter_hour_slots_inclusive": [
+      "09:00",
+      "16:00"
+    ]
+  },
+  "first_local_date": "2030-01-07",
+  "fixed_rule_table": [
+    [
+      0.05,
+      0.25,
+      0.55
+    ],
+    [
+      0.3,
+      0.55,
+      0.8
+    ],
+    [
+      0.6,
+      0.85,
+      1.0
+    ]
+  ],
+  "fixed_weights": {
+    "fuzzy_weight": 0.8,
+    "history_weight": 0.2,
+    "linear": [
+      0.6,
+      0.4
+    ],
+    "prior_mean": 0.5,
+    "prior_strength": 2
+  },
+  "grid_minutes": 15,
+  "history_sizes_per_category_daypart": [
+    0,
+    1,
+    20
+  ],
+  "importance_range_inclusive": [
+    1,
+    5
+  ],
+  "independence": "Each full condition/load/history_n/repeat cell has a distinct SHA-256-derived seed; paired only across methods.",
+  "load_targets": [
+    0.7,
+    1.4
+  ],
+  "master_seed": 20261104,
+  "measurement": {
+    "denominator_importance": "sum of importance of ALL input tasks, including unplaced/infeasible tasks",
+    "elapsed_ms": "median of planner-only perf_counter durations",
+    "fraction_units": "percent, 0 to 100",
+    "order": "independently shuffled methods inside each timing round of each scenario",
+    "parameter_tuning": "none; previously specified parameters remain fixed",
+    "runtime_scope": "five modes of a shared implementation; all currently compute fuzzy_priority",
+    "warmup": "one untimed invocation of each of the five methods on the first scenario"
+  },
+  "method_labels": {
+    "edf": "Найближчий строк",
+    "fuzzy": "Нечітка оцінка",
+    "personalized": "Запропонований метод",
+    "weighted": "Лінійна оцінка",
+    "weighted_history": "Лінійна оцінка з історією"
+  },
+  "methods": [
+    "edf",
+    "weighted",
+    "weighted_history",
+    "fuzzy",
+    "personalized"
+  ],
+  "planner_version": "1.0",
+  "repeats_per_cell": 30,
+  "scenario_count": 540,
+  "schema_version": "1.0",
+  "seed_derivation": "First 8 SHA-256 bytes, big endian, of master_seed|condition|load_target|history_n|repeat; tagged RNG streams.",
+  "simulator": {
+    "amplitude_no_time_effect": 0.0,
+    "amplitude_stable_and_drift": 0.28,
+    "evaluation": "independent interval fit, no cascading delay propagation",
+    "formula": "duration * exp(0.12 - A*cos(2*pi*(hour-peak)/24) + difficulty + 0.25*noise)",
+    "future_drift_hours": 8,
+    "future_random_numbers": "one fixed difficulty and noise per task, shared by all methods",
+    "history_dates": "uniform over 1 to 60 days before the first planning date",
+    "history_hours": "uniform inside each six-hour daypart",
+    "history_success": "simulated_duration <= 15*ceil(estimated_duration/15)",
+    "no_time_effect_control": "no systematic time-of-day or category effect",
+    "noise": "independent standard normal",
+    "past_category_peaks_uniform_hours": [
+      8,
+      20
+    ],
+    "planner_has_access_to_hidden_simulation_fields": false,
+    "task_difficulty_uniform": [
+      -0.12,
+      0.12
+    ]
+  },
+  "task_count_rule": "Generate until sum(15*ceil(duration/15)) >= load_target*960; retain final whole task.",
+  "timezone": "Europe/Kyiv",
+  "timing_repeats": 3
+}

@@ -1,0 +1,54 @@
+{
+  "status": "complete",
+  "created_utc": "2026-11-08T20:20:31.334976+00:00",
+  "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+  "numpy": "2.3.5",
+  "platform": "Windows-10-10.0.19045-SP0",
+  "analysis_script_sha256": "e3ce55af870ce8178019eedd23ec7565dd70eea6d616cd313b120ac8e288ee21",
+  "source_manifest_sha256": "a7c9b989e8c1e410c39a46a4cfdd4302f3ecbdb5913db69f41d714c959968c77",
+  "source_checksums": {
+    "inputs.jsonl": "c0b246ac6b149ad155a06f65db4c17af5955f28fd8b1b04d5e4d997d7a63d5e7",
+    "assignments.jsonl": "1de53fb1f259426cde339c47e5999280f106e7a8277011700e058e63d0c9bbf9",
+    "case_metrics.csv": "fd6b05a885fa5a0ff5277a5788b11e06433bab918ffdb03b632224504fdb478d",
+    "config.json": "233959c8c90d76d6f4e60e5284b76f83e561568329034ed94437a7766f292fdd"
+  },
+  "code_checksums": {
+    "app/recommender.py": "b24065f436c7a3048b5f3806e6efd258bfb7a97063ffa5b4ed99ca1a875a1d7b",
+    "experiments/run_supervisor_15.py": "7fa51e4a04796def834e808534f3f763c545f5229aad4f258a53314e7c6b01d9",
+    "experiments/run_comparison.py": "998de148e54920f632fee302cb1f171e45eaaba9c88b0981b3ef6d68315dd2e7",
+    "experiments/run_recency_comparison.py": "a22d67120c825304c00332899926e2ddc13ca7e0b06c249f429b2f155ec40feb",
+    "experiments/protocol_supervisor_15.md": "14e6595f5d5ef5d7fbb2cd623e87babf77cfa07944a7651f11c5052e43e661f2"
+  },
+  "extra_sources": {},
+  "parameters": {
+    "bootstrap_seed": 20261109,
+    "bootstrap_repeats": 5000,
+    "interval": "95% paired percentile; whole independent task sets; separate N=20/N=0",
+    "multiple_comparison_adjustment": false,
+    "ratio": "mean V(method) / mean V(EDF)",
+    "contrasts": [
+      "edf",
+      "importance",
+      "personalized",
+      "fuzzy",
+      "weighted_recent"
+    ],
+    "metrics": [
+      "placed_fraction",
+      "normalized_value",
+      "simulated_on_time_importance_fraction"
+    ],
+    "uncertainty_scope": "given synthetic generator only",
+    "illustration": "supervisor15_n20_r000",
+    "exact_supervisor_replication": false,
+    "parameter_tuning": false
+  },
+  "output_checksums": {
+    "summary.csv": "7fa0fcfc2dc3d5d300f480b9be67743313531b4b01d66a843b1c95e557450d6b",
+    "paired_comparisons.csv": "030a45f00979e56e6204e1fbd04ee0ecff275900bd9d09d4bc42c48999fc8dc5",
+    "illustration.csv": "faf5c071452d820fa67dd7eddb030a04d44277c637eebf6140d6246610e92de8",
+    "illustration_tasks.csv": "1495b50872de36fd37075c086f0a6680cea4834fe01a65ac47ac68a848c9af84",
+    "illustration_assignments.csv": "d753b78198e2d58a0ef42740d066fa3df72ae22142671310ec1694844250c0cb",
+    "analysis.json": "69e246a22b664acf82b379000161c58d352c967c97af0d46ee8b7eb73d2729f2"
+  }
+}

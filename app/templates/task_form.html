@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Редагування задачі' if task else 'Нова задача' }}{% endblock %}
+{% macro value(name, default='') -%}{{ request.form.get(name, default) if request.method == 'POST' else default }}{%- endmacro %}
+{% block content %}
+<a class="back-link" href="{{ url_for('routes.index') }}">← До задач</a>
+<section class="panel form-panel"><p class="eyebrow">ПАРАМЕТРИ ПЛАНУВАННЯ</p><h1>{{ 'Редагування задачі' if task else 'Нова задача' }}</h1>
+<form method="post" class="stack"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+<label>Назва<input name="title" value="{{ value('title', task.title if task else '') }}" required maxlength="140"></label>
+<label>Опис<textarea name="description" rows="3">{{ value('description', task.description if task else '') }}</textarea></label>
+<div class="form-grid">
+<label>Категорія<select name="category_id" required>{% for c in categories %}<option value="{{ c.id }}" {% if value('category_id', task.category_id if task else (categories|selectattr('name','equalto','Без категорії')|first).id)|int == c.id %}selected{% endif %}>{{ c.name }}</option>{% endfor %}</select></label>
+<label>Важливість<select name="importance">{% for i in range(1,6) %}<option value="{{ i }}" {% if value('importance', task.importance if task else 3)|int == i %}selected{% endif %}>{{ i }} – {{ {1:'найнижча',2:'низька',3:'середня',4:'висока',5:'найвища'}[i] }}</option>{% endfor %}</select></label>
+<label>Орієнтовна тривалість, хв<input name="duration_min" type="number" min="1" max="10080" value="{{ value('duration_min', task.duration_min if task else 30) }}" required></label>
+<div class="help">Для розміщення в календарі тривалість округлюється вгору до 15 хвилин. Наприклад, 40 хв займають 45 хв.</div>
+<label>Найраніший початок <small>необов’язково</small><input type="datetime-local" name="earliest_start" value="{{ value('earliest_start', task.earliest_start|form_dt if task else '') }}"></label>
+<label>Граничний строк <small>необов’язково</small><input type="datetime-local" name="deadline" value="{{ value('deadline', task.deadline|form_dt if task else '') }}"></label>
+</div>
+<p class="help">Час: {{ current_user.timezone }}. Граничний строк – це час, до якого задача має завершитися.</p>
+<p class="help">Укажіть початок – після збереження задача одразу займе час у календарі. Початок і тривалість округлюються вгору до 15 хвилин.</p>
+{% if task %}<p class="help">Зміна часу або тривалості оновить розміщення. Якщо час зайнятий, зміни не збережуться.</p>{% endif %}
+<div class="actions"><button class="button primary" type="submit">Зберегти задачу</button><a class="button" href="{{ url_for('routes.index') }}">Скасувати</a></div>
+</form></section>
+{% endblock %}

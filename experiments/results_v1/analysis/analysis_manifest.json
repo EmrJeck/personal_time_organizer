@@ -1,0 +1,43 @@
+{
+  "status": "complete",
+  "created_utc": "2026-11-05T17:44:30.595570+00:00",
+  "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+  "numpy": "2.3.5",
+  "platform": "Windows-10-10.0.19045-SP0",
+  "analysis_script_sha256": "deaee5af7baeae5befea5bf345b368f877a891a2a6cd9fc1e48c07a3103dab68",
+  "parameters": {
+    "bootstrap_repeats": 5000,
+    "bootstrap_seed": 20261105,
+    "bootstrap_rng": "numpy.random.default_rng (PCG64)",
+    "interval": "95% percentile, paired stratified resampling of whole scenarios",
+    "strata": "condition x load_target x history_n; 18 overall, 2 per condition/history subgroup",
+    "estimand": "equal-scenario mean; fixed experimental-cell weights",
+    "monte_carlo_se": "sqrt(sum_h(w_h^2 * sample_variance_h / n_h))",
+    "primary_metric": "simulated_on_time_importance_fraction",
+    "contrast_units": "percentage points",
+    "interval_scope": "Monte Carlo uncertainty for this generator only",
+    "contrasts": [
+      [
+        "personalized",
+        "fuzzy"
+      ],
+      [
+        "personalized",
+        "weighted_history"
+      ]
+    ]
+  },
+  "source_manifest_sha256": "b49438027a8370aac3e4b4a44d1b2c723735153c9a2d74fe8a2fa36dfd37c988",
+  "source_checksums": {
+    "assignments.jsonl": "030acc33c94d72fc627fc45bdd086c581fdd99391d8e046c1754d79a1e16373a",
+    "case_metrics.csv": "9b794027d7763f8f8b6df75fbcdb60943f56185abd79c9bc7ffe580c55e11de6",
+    "inputs.jsonl": "fbade753e62d24117d0875d8545b79ef0330d859d80a2b705a8d3ad8de46a7af",
+    "config.json": "b08bb4ad97e697c04dc3a414430607895e99b06ef822df99452837e101b52603"
+  },
+  "output_checksums": {
+    "summary.csv": "1e6a6f188e057cd4017923693918f2ec847807183d78a0ac5550ddcfcf3063ac",
+    "paired_comparisons.csv": "a74745ac885129e8e1ad92c156811f1945dab3074ce498a62cc583fcc2148b95",
+    "subgroup_metrics.csv": "8818e05115a3305a7b26e9a951bfd4a074e95c4cf4de16cc15e495d0393d1de2",
+    "analysis.json": "3514c838427e11a8a928eebe5f4a2b9a77ca8ae1c1d3459adb637cdcba517194"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "completed_utc": "2026-11-05T17:42:12.937970+00:00",
+  "config_sha256": "b08bb4ad97e697c04dc3a414430607895e99b06ef822df99452837e101b52603",
+  "cpu": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+  "database_access": false,
+  "engine_sha256": "a22a28e487a39ad0fab190a3e8d7c04208e2f10399cf2cbea6c4aa3201fbaa84",
+  "independent_scenario_count": 540,
+  "inputs_sha256": "fbade753e62d24117d0875d8545b79ef0330d859d80a2b705a8d3ad8de46a7af",
+  "logical_cpu_count": 20,
+  "measured_planner_calls": 8100,
+  "metric_rows": 2700,
+  "outputs_sha256": {
+    "assignments.jsonl": "030acc33c94d72fc627fc45bdd086c581fdd99391d8e046c1754d79a1e16373a",
+    "case_metrics.csv": "9b794027d7763f8f8b6df75fbcdb60943f56185abd79c9bc7ffe580c55e11de6",
+    "inputs.jsonl": "fbade753e62d24117d0875d8545b79ef0330d859d80a2b705a8d3ad8de46a7af"
+  },
+  "paired_methods_on_identical_inputs": true,
+  "parameter_tuning": false,
+  "platform": "Windows-10-10.0.19045-SP0",
+  "python": "3.13.2 (tags/v3.13.2:4f8bb39, Feb  4 2025, 15:23:48) [MSC v.1942 64 bit (AMD64)]",
+  "scenario_count": 540,
+  "schema_version": "1.0",
+  "script_sha256": "998de148e54920f632fee302cb1f171e45eaaba9c88b0981b3ef6d68315dd2e7",
+  "started_utc": "2026-11-05T17:42:00.651948+00:00",
+  "status": "complete",
+  "total_violations": 0,
+  "wall_time_seconds": 12.286039399914443,
+  "warmup_planner_calls": 5
+}

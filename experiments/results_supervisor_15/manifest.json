@@ -1,0 +1,29 @@
+{
+  "status": "complete",
+  "started_utc": "2026-11-08T20:18:25.038854+00:00",
+  "python": "3.13.2 (tags/v3.13.2:4f8bb39, Feb  4 2025, 15:23:48) [MSC v.1942 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.19045-SP0",
+  "sources_sha256": {
+    "app/recommender.py": "b24065f436c7a3048b5f3806e6efd258bfb7a97063ffa5b4ed99ca1a875a1d7b",
+    "experiments/run_supervisor_15.py": "7fa51e4a04796def834e808534f3f763c545f5229aad4f258a53314e7c6b01d9",
+    "experiments/run_comparison.py": "998de148e54920f632fee302cb1f171e45eaaba9c88b0981b3ef6d68315dd2e7",
+    "experiments/run_recency_comparison.py": "a22d67120c825304c00332899926e2ddc13ca7e0b06c249f429b2f155ec40feb",
+    "experiments/protocol_supervisor_15.md": "14e6595f5d5ef5d7fbb2cd623e87babf77cfa07944a7651f11c5052e43e661f2"
+  },
+  "config_sha256": "233959c8c90d76d6f4e60e5284b76f83e561568329034ed94437a7766f292fdd",
+  "database_access": false,
+  "parameter_tuning": false,
+  "independent_task_sets": 200,
+  "completed_utc": "2026-11-08T20:19:06.910393+00:00",
+  "scenario_count": 400,
+  "metric_rows": 3200,
+  "total_violations": 0,
+  "measured_planner_calls": 9600,
+  "warmup_calls": 8,
+  "wall_time_seconds": 41.800275899935514,
+  "outputs_sha256": {
+    "inputs.jsonl": "c0b246ac6b149ad155a06f65db4c17af5955f28fd8b1b04d5e4d997d7a63d5e7",
+    "assignments.jsonl": "1de53fb1f259426cde339c47e5999280f106e7a8277011700e058e63d0c9bbf9",
+    "case_metrics.csv": "fd6b05a885fa5a0ff5277a5788b11e06433bab918ffdb03b632224504fdb478d"
+  }
+}

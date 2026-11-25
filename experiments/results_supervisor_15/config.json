@@ -1,0 +1,84 @@
+{
+  "schema_version": "supervisor15-1.0",
+  "master_seed": 20261108,
+  "independent_task_sets": 200,
+  "scenario_count": 400,
+  "history_sizes": [
+    20,
+    0
+  ],
+  "methods": [
+    "edf",
+    "importance",
+    "weighted",
+    "weighted_history",
+    "fuzzy",
+    "personalized",
+    "weighted_recent",
+    "personalized_recent"
+  ],
+  "method_labels": {
+    "edf": "Найближчий строк",
+    "weighted": "Лінійна оцінка",
+    "weighted_history": "Лінійна оцінка з усією історією",
+    "fuzzy": "Нечітка оцінка",
+    "personalized": "Попередній повний метод",
+    "weighted_recent": "Лінійна оцінка з давністю історії",
+    "personalized_recent": "Оновлений повний метод",
+    "importance": "Лише важливість"
+  },
+  "timing_repeats": 3,
+  "tasks_per_case": 15,
+  "capacity_minutes": 1080,
+  "window_minutes": 1800,
+  "busy_minutes": 720,
+  "weights": [
+    0.8,
+    0.2
+  ],
+  "normalized_priorities": [
+    0.25,
+    0.5,
+    0.75
+  ],
+  "illustration": "supervisor15_n20_r000",
+  "protocol": "experiments/protocol_supervisor_15.md",
+  "simulator": {
+    "formula": "duration * exp(0.12 - A*cos(2*pi*(hour-peak)/24) + difficulty + 0.25*noise)",
+    "amplitude_stable_and_drift": 0.28,
+    "amplitude_no_time_effect": 0.0,
+    "past_category_peaks_uniform_hours": [
+      8,
+      20
+    ],
+    "future_drift_hours": 8,
+    "task_difficulty_uniform": [
+      -0.12,
+      0.12
+    ],
+    "noise": "independent standard normal",
+    "history_hours": "uniform inside each six-hour daypart",
+    "history_dates": "uniform over 1 to 60 days before the first planning date",
+    "history_success": "simulated_duration <= 15*ceil(estimated_duration/15)",
+    "future_random_numbers": "one fixed difficulty and noise per task, shared by all methods",
+    "evaluation": "independent interval fit, no cascading delay propagation",
+    "no_time_effect_control": "no systematic time-of-day or category effect",
+    "planner_has_access_to_hidden_simulation_fields": false,
+    "change_age_days": {
+      "unseen_drift": 0,
+      "observed_drift_7": 7,
+      "observed_drift_14": 14,
+      "observed_drift_28": 28
+    },
+    "stable_conditions": [
+      "stable",
+      "no_time_effect"
+    ],
+    "change_rule": "historical start >= as_of - change_age_days uses shifted peak; earlier starts use old peak",
+    "historical_timestamps": "planned_end=start+15*ceil(estimated_minutes/15)",
+    "unseen_drift": "change occurs at as_of; all available history precedes the change",
+    "fresh_history": "observed drift may contain completed post-change outcomes; no future outcomes used"
+  },
+  "exact_supervisor_data_available": false,
+  "parameter_tuning": false
+}

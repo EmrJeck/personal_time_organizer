@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Рекомендації{% endblock %}
+{% block content %}
+<div class="page-heading"><div><p class="eyebrow">ПЛАНУВАННЯ ОСОБИСТОГО ЧАСУ</p><h1>Рекомендації</h1><p class="muted">Оберіть дні та години для виконання задач.</p></div><a class="button" href="{{ url_for('routes.calendar') }}">Відкрити календар</a></div>
+<div class="recommendation-layout">
+<section class="panel"><h2>Коли ви можете працювати над задачами?</h2>
+<form method="post" class="stack"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+<div class="form-grid"><label for="first_day">Початкова дата<input id="first_day" name="first_day" type="date" min="1900-01-01" max="2100-12-31" required value="{{ request.form.get('first_day',default_day.isoformat()) }}"></label>
+<label for="days">Кількість днів<select id="days" name="days">{% for n in range(1,8) %}<option value="{{ n }}" {% if request.form.get('days','1') == n|string %}selected{% endif %}>{{ n }}</option>{% endfor %}</select></label>
+<label for="start_clock">Щодня з<input id="start_clock" name="start_clock" type="time" step="900" required value="{{ request.form.get('start_clock','09:00') }}"></label>
+<label for="end_clock">Щодня до<input id="end_clock" name="end_clock" type="time" step="900" required value="{{ request.form.get('end_clock','18:00') }}"></label></div>
+<p class="help">Однакові години для всіх обраних днів, включно з вихідними. Зайнятий час пропускається.</p>
+<label for="reminder_minutes">Нагадування після прийняття плану<select name="reminder_minutes" id="reminder_minutes"><option value="">Без нагадування</option>{% for n in (0,5,10,15,30,60) %}<option value="{{ n }}" {% if request.form.get('reminder_minutes') == n|string %}selected{% endif %}>{{ 'На початку' if n == 0 else 'За ' ~ n ~ ' хв' }}</option>{% endfor %}</select></label>
+<p class="help">Листи вимкнено. Час нагадування буде лише збережено.</p>
+<button class="button primary" type="submit">Сформувати проєкт плану</button>
+</form></section>
+<aside class="panel explanation"><p class="eyebrow">ПІДКАЗКА</p><h2>Як отримати план</h2>
+<p>У задачах вкажіть важливість, тривалість і строки.</p>
+<p>Сформуйте план, перевірте час і натисніть «Прийняти план».</p>
+</aside>
+</div>
+{% if recent %}<section class="panel recent-plans"><h2>Останні проєкти планів</h2><div class="table-scroll"><table><thead><tr><th>Створено</th><th>Період</th><th>Стан</th><th></th></tr></thead><tbody>{% for plan in recent %}<tr><td>{{ plan.created_at|local_dt }}</td><td>{{ plan.horizon_start|local_dt('%d.%m') }} – {{ plan.horizon_end|local_dt('%d.%m') }}</td><td>{{ {'draft':'Проєкт','accepted':'Прийнято','canceled':'Скасовано'}[plan.status] }}</td><td><a href="{{ url_for('routes.recommendation_detail',plan_id=plan.id) }}">Переглянути</a></td></tr>{% endfor %}</tbody></table></div></section>{% endif %}
+{% endblock %}

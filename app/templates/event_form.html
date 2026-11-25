@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Редагування події' if event else 'Нова подія' }}{% endblock %}
+{% macro value(name, default='') -%}{{ request.form.get(name, default) if request.method == 'POST' else default }}{%- endmacro %}
+{% block content %}
+<a class="back-link" href="{{ url_for('routes.calendar') }}">← До календаря</a>
+<section class="panel form-panel"><p class="eyebrow">ЗАЙНЯТИЙ ЧАС</p><h1>{{ 'Редагування події' if event else 'Нова подія' }}</h1>
+<p class="muted">Зустрічі, заняття та перерви визначають час, недоступний для задач.</p>
+<form method="post" class="stack"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+<label>Назва<input name="title" required maxlength="140" value="{{ value('title', event.title if event else '') }}" placeholder="Наприклад, зустріч із керівником"></label>
+<label>Тип<select name="event_type"><option value="fixed" {% if value('event_type', event.event_type if event else 'fixed') == 'fixed' %}selected{% endif %}>Фіксована подія</option><option value="break" {% if value('event_type', event.event_type if event else '') == 'break' %}selected{% endif %}>Перерва</option></select></label>
+<div class="form-grid"><label>Початок<input name="starts_at" type="datetime-local" required value="{{ value('starts_at', event.starts_at|form_dt if event else day ~ 'T09:00') }}"></label>
+<label>Завершення<input name="ends_at" type="datetime-local" required value="{{ value('ends_at', event.ends_at|form_dt if event else day ~ 'T10:00') }}"></label></div>
+<p class="help">Час: {{ current_user.timezone }}. Події не можуть перетинатися з іншими подіями та запланованими задачами.</p>
+<div class="actions"><button class="button primary" type="submit">Зберегти подію</button><a class="button" href="{{ url_for('routes.calendar') }}">Скасувати</a></div>
+</form></section>
+{% endblock %}

@@ -1,0 +1,47 @@
+{
+  "status": "complete",
+  "created_utc": "2026-11-06T11:42:54.757285+00:00",
+  "python": "3.13.2 (tags/v3.13.2:4f8bb39, Feb  4 2025, 15:23:48) [MSC v.1942 64 bit (AMD64)]",
+  "numpy": "2.5.4",
+  "platform": "Windows-10-10.0.19045-SP0",
+  "analysis_script_sha256": "d32f6d402abafa3cebd78b22541688a065df14df3e46efc400d993fb3152fb60",
+  "parameters": {
+    "bootstrap_repeats": 5000,
+    "bootstrap_seed": 20261107,
+    "bootstrap_rng": "numpy.random.default_rng (PCG64)",
+    "interval": "95% percentile, paired stratified resampling of whole scenarios",
+    "strata": "condition x load_target x history_n; 36 overall, 2 per condition/history subgroup",
+    "estimand": "equal-scenario mean; fixed experimental-cell weights",
+    "monte_carlo_se": "sqrt(sum_h(w_h^2 * sample_variance_h / n_h))",
+    "primary_metric": "simulated_on_time_importance_fraction",
+    "contrast_units": "percentage points",
+    "interval_scope": "Monte Carlo uncertainty for this generator only",
+    "contrasts": [
+      [
+        "personalized_recent",
+        "personalized"
+      ],
+      [
+        "personalized_recent",
+        "fuzzy"
+      ],
+      [
+        "personalized_recent",
+        "weighted_recent"
+      ]
+    ]
+  },
+  "source_manifest_sha256": "6768b4d4e190c7ddb110657ca93f343ac64ae5287b065144da6586566e54e0c8",
+  "source_checksums": {
+    "assignments.jsonl": "46ef91240ea15d1805367d7cfa38b2332ee425f5f6b9b37ff9d710e1f5590e5e",
+    "case_metrics.csv": "94ec88b55493dd2a251887c2f26c4d4b6ea1400a187b1503b54a76f5d133af19",
+    "inputs.jsonl": "5c31cfbbdded7fb73cd6e039fd36bc80abf73372bfa50e20e8d6afe6770ca076",
+    "config.json": "f7d023b071cbbead891b734e855bf5dd710cba007f764ef79379448e8dc45c09"
+  },
+  "output_checksums": {
+    "summary.csv": "514c9050871edcd7ef93629dad60a85e8be22f1ec35c4dd019edadbb9c5eef2d",
+    "paired_comparisons.csv": "c4749fd171c2ff160a54be9ebea75850c7383fbf2b0e6976d574c3f7d4b99710",
+    "subgroup_metrics.csv": "46488d53774e879a282d6c2083e5afe3fdad650bec40b3cac555bd67fadad740",
+    "analysis.json": "9198d9ac1f3a36a3b38767df343d1dd74fca54a13b352ddfac4a91e1a21844aa"
+  }
+}

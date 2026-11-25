@@ -1,0 +1,36 @@
+{
+  "completed_utc": "2026-11-05T22:51:24.283902+00:00",
+  "config_sha256": "f7d023b071cbbead891b734e855bf5dd710cba007f764ef79379448e8dc45c09",
+  "cpu": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+  "database_access": false,
+  "engine_sha256": "660346db68d01f874bd53a69dbc492ff4edc679307538c69ed90c2274b26fa7e",
+  "frozen_baseline_equivalence_checks": 7200,
+  "history_aggregation_in_timing": false,
+  "independent_scenario_count": 1440,
+  "inputs_sha256": "5c31cfbbdded7fb73cd6e039fd36bc80abf73372bfa50e20e8d6afe6770ca076",
+  "logical_cpu_count": 20,
+  "measured_planner_calls": 30240,
+  "metric_rows": 10080,
+  "outputs_sha256": {
+    "assignments.jsonl": "46ef91240ea15d1805367d7cfa38b2332ee425f5f6b9b37ff9d710e1f5590e5e",
+    "case_metrics.csv": "94ec88b55493dd2a251887c2f26c4d4b6ea1400a187b1503b54a76f5d133af19",
+    "inputs.jsonl": "5c31cfbbdded7fb73cd6e039fd36bc80abf73372bfa50e20e8d6afe6770ca076"
+  },
+  "paired_methods_on_identical_inputs": true,
+  "parameter_tuning": false,
+  "platform": "Windows-10-10.0.19045-SP0",
+  "python": "3.13.2 (tags/v3.13.2:4f8bb39, Feb  4 2025, 15:23:48) [MSC v.1942 64 bit (AMD64)]",
+  "scenario_count": 1440,
+  "schema_version": "2.0",
+  "script_sha256": "a22d67120c825304c00332899926e2ddc13ca7e0b06c249f429b2f155ec40feb",
+  "sources_sha256": {
+    "experiments/frozen_v1/recommender.py": "a22a28e487a39ad0fab190a3e8d7c04208e2f10399cf2cbea6c4aa3201fbaa84",
+    "experiments/protocol_v2.md": "778e457d465cda9a509c85ed47066faa0623cc19c23155fb4a41d362f5fc8616",
+    "experiments/run_comparison.py": "998de148e54920f632fee302cb1f171e45eaaba9c88b0981b3ef6d68315dd2e7"
+  },
+  "started_utc": "2026-11-05T22:50:07.136429+00:00",
+  "status": "complete",
+  "total_violations": 0,
+  "wall_time_seconds": 77.14749820018187,
+  "warmup_planner_calls": 7
+}

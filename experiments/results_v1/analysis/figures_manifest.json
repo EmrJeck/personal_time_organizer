@@ -1,0 +1,14 @@
+{
+  "source_analysis_sha256": "3514c838427e11a8a928eebe5f4a2b9a77ca8ae1c1d3459adb637cdcba517194",
+  "plot_script_sha256": "b69dedc1f9f60c288806c15fa072be48eca9dc4072a69d529992006344b8c7fa",
+  "matplotlib": "3.11.2",
+  "numpy": "2.5.4",
+  "png_dpi": 300,
+  "intervals": "Marginal 95% paired stratified percentile bootstrap; generator uncertainty only",
+  "files": {
+    "figure_3_5_algorithm_comparison.png": "0400b85f31b74206497daed31cb602c0028e2caafb2c2416bd4aab798231074a",
+    "figure_3_5_algorithm_comparison.svg": "3348f2fc37ecc52f72889c1c47c4793ef9d5d57c93c5366f2d9ea41b3f440a30",
+    "figure_3_6_component_effects.png": "9c021efb0b7584c070e2161f6bd94d72e2ad4289e441cb87c2365f095dd1e0fd",
+    "figure_3_6_component_effects.svg": "797ca8148fb23696c9f077b938b185723cc5d88829dd78ad97e5b6e8e49da302"
+  }
+}

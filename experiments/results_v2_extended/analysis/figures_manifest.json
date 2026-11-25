@@ -1,0 +1,19 @@
+{
+  "source_analysis_sha256": "18d2434a4a95928036940c539b2eaa0fb9c07ef1173c3f9aa76ff778aaca2e9d",
+  "plot_script_sha256": "29e75db28a0d107ec791a5023ea6c9fc939e3cb2f589ab859db42593e3071016",
+  "matplotlib": "3.11.2",
+  "numpy": "2.5.4",
+  "png_dpi": 300,
+  "files": {
+    "docs\\figure_3_5_algorithm_comparison_v3.png": "696cd2ca37cf887bbd30787b8688b4b419120cc137c4dda308dce9e91ca49ea3",
+    "docs\\figure_3_5_algorithm_comparison_v3.svg": "99fdf62d5d5547843b2363e62cdb74f7593d16320f33da8483c1548a5b7aa5b1"
+  },
+  "intervals": "95% percentile bootstrap; generator uncertainty only",
+  "supervisor_figure_methods": [
+    "edf",
+    "importance",
+    "personalized",
+    "personalized_recent"
+  ],
+  "supervisor_history_n": 20
+}

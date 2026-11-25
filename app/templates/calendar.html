@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Календар{% endblock %}
+{% block content %}
+<div class="page-heading"><div><p class="eyebrow">РОЗПОДІЛ ОСОБИСТОГО ЧАСУ</p><h1>Календар</h1><p class="muted">Задачі, зустрічі та перерви на тиждень.</p></div><a class="button primary" href="{{ url_for('routes.create_event', date=selected.isoformat()) }}">+ Додати подію</a></div>
+<div class="calendar-toolbar"><div class="actions"><a class="button square" aria-label="Попередній тиждень" href="{{ url_for('routes.calendar', date=previous.isoformat()) }}">←</a><a class="button square" aria-label="Наступний тиждень" href="{{ url_for('routes.calendar', date=following.isoformat()) }}">→</a><a class="button" href="{{ url_for('routes.calendar') }}">Сьогодні</a><strong>{{ first.strftime('%d.%m') }} – {{ end.strftime('%d.%m.%Y') }}</strong></div>
+<form method="get" class="actions"><label class="sr-only" for="calendar-date">Дата календаря</label><input id="calendar-date" type="date" name="date" value="{{ selected }}" min="1900-01-01" max="2100-12-31" required><button class="button" type="submit">Перейти</button></form></div>
+<div class="legend"><span class="dot task-dot"></span> Заплановано <span class="dot available-dot"></span> Початок терміну <span class="dot event-dot"></span> Подія <span class="dot break-dot"></span> Перерва <span class="muted">· {{ current_user.timezone }}</span></div>
+<div class="calendar-scroll"><div class="week-grid">
+{% for day in days %}<section class="day {{ 'today' if day.date == today else '' }}" aria-label="{{ day.date }}"><div class="day-heading"><span>{{ weekday_names[loop.index0] }}</span><a href="{{ url_for('routes.calendar', date=day.date.isoformat()) }}">{{ day.date.strftime('%d.%m') }}</a>{% if day.date == today %}<small>сьогодні</small>{% endif %}</div>
+<div class="day-content">
+{% for entry in day.entries %}{% set record = entry.record %}
+{% if entry.kind == 'available' %}
+<article class="calendar-card available-card" data-task-start="{{ record.id }}">
+<div class="time-range">Від {{ entry.from_time }}</div>
+<h3>{{ record.title }}</h3>
+<p class="small">Початок терміну · {{ record.duration_min }} хв</p>
+{% if record.deadline %}<p class="small">До {{ record.deadline|local_dt }}</p>{% endif %}
+<div class="card-actions"><a href="{{ url_for('routes.calendar', date=day.date.isoformat(), task_id=record.id, _anchor='schedule') }}">Запланувати</a><a href="{{ url_for('routes.edit_task', task_id=record.id) }}">Змінити</a></div>
+</article>
+{% else %}
+<article class="calendar-card {{ 'event-card ' ~ record.event_type if entry.kind == 'event' else 'scheduled-card ' ~ record.status }}">
+<div class="time-range">{{ entry.from_time }}–{{ entry.to_time }}</div>
+<h3>{{ record.title if entry.kind == 'event' else record.task_snapshot_json.get('title', record.task.title) }}</h3>
+{% if entry.continues %}<p class="small">Перехід між днями</p>{% endif %}
+{% if entry.kind == 'event' %}<p class="small">{{ 'Перерва' if record.event_type == 'break' else 'Подія' }}</p>
+<div class="card-actions"><a href="{{ url_for('routes.edit_event', event_id=record.id) }}">Змінити</a>
+<form method="post" action="{{ url_for('routes.delete_event', event_id=record.id) }}" onsubmit="return confirm('Видалити цю подію?')"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button type="submit" class="text-button">Видалити</button></form></div>
+{% else %}<p class="small">{{ {'scheduled':'Заплановано','in_progress':'Виконується','completed':'Виконано'}[record.status] }}</p>
+{% if record.status == 'scheduled' %}<div class="card-actions">
+<form method="post" action="{{ url_for('routes.start_task', item_id=record.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="text-button" type="submit">Почати</button></form>
+<a href="{{ url_for('routes.calendar', date=day.date.isoformat(), task_id=record.task_id) }}#schedule">Перенести</a>
+<form method="post" action="{{ url_for('routes.cancel_schedule', item_id=record.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="text-button" type="submit">Скасувати</button></form></div>
+{% elif record.status == 'in_progress' %}<form method="post" action="{{ url_for('routes.toggle_task', task_id=record.task_id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="text-button" type="submit">Завершити</button></form>{% endif %}
+{% endif %}
+</article>
+{% endif %}
+{% else %}<p class="empty-day">Вільний день</p>{% endfor %}
+</div></section>{% endfor %}
+</div></div>
+<section id="schedule" class="panel schedule-panel"><div><p class="eyebrow">РУЧНЕ ПЛАНУВАННЯ</p><h2>Розмістити задачу</h2><p class="muted">Оберіть задачу та час початку. Завершення обчислюється за її тривалістю.</p><p class="help">Крок планування – 15 хвилин. Система перевіряє зайнятість і граничний строк. Повторне планування переносить задачу, зберігаючи історію.</p></div>
+{% if tasks %}<form method="post" action="{{ url_for('routes.schedule') }}" class="stack"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><input type="hidden" name="date" value="{{ selected }}">
+<label>Задача<select name="task_id" required><option value="">Оберіть задачу</option>{% for task in tasks %}<option value="{{ task.id }}" {% if selected_task == task.id %}selected{% endif %}>{{ task.title }} · {{ task.duration_min }} хв · важливість {{ task.importance }}/5</option>{% endfor %}</select></label>
+<div class="form-grid"><label>Початок<input type="datetime-local" name="planned_start" required step="900" value="{{ request.form.get('planned_start', default_start) }}"></label>
+<label>Нагадування<select name="reminder_minutes"><option value="">Без нагадування</option>{% for minutes in (0,5,10,15,30,60) %}<option value="{{ minutes }}" {% if request.form.get('reminder_minutes') == minutes|string %}selected{% endif %}>{{ 'На початку' if minutes == 0 else 'За ' ~ minutes ~ ' хв' }}</option>{% endfor %}</select></label></div>
+<p class="help">Час нагадування зберігається, але листи в локальній версії не надсилаються.</p>
+<button type="submit" class="button primary">Зберегти в календарі</button></form>
+{% else %}<div class="empty"><p>Немає активних задач для планування.</p><a class="button" href="{{ url_for('routes.create_task') }}">Створити задачу</a></div>{% endif %}
+</section>
+{% endblock %}

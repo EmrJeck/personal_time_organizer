@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Проєкт плану{% endblock %}
+{% block content %}
+{% set params=plan.parameters_json %}
+<a class="back-link" href="{{ url_for('routes.recommendations') }}">← До рекомендацій</a>
+<div class="page-heading recommendation-heading"><div><p class="eyebrow">ВАШ РЕКОМЕНДОВАНИЙ РОЗКЛАД</p><h1>{{ 'Проєкт плану' if plan.status == 'draft' else 'Прийнятий план' if plan.status == 'accepted' else 'Скасований план' }}</h1><p class="muted">{{ plan.horizon_start|local_dt }} – {{ plan.horizon_end|local_dt }} · {{ params.timezone }}</p></div><span class="badge">Задач у плані: {{ plan.items|length }}</span></div>
+{% if problem %}<p class="alert danger">{{ problem }}</p>{% endif %}
+{% if plan.status == 'draft' %}<p class="notice">Щоб додати задачі до календаря, натисніть «Прийняти план».</p>{% endif %}
+{% if params.history_observations == 0 %}<p class="alert">Історії виконання ще немає. План складено за важливістю та строками.</p>{% endif %}
+<div class="recommendation-cards">
+{% for item in plan.items|sort(attribute='planned_start') %}
+{% set snap=item.task_snapshot_json %}{% set r=snap.recommendation %}
+<article class="panel recommendation-card">
+<div class="recommendation-time"><strong>{{ item.planned_start|local_dt('%H:%M') }}–{{ item.planned_end|local_dt('%H:%M') }}</strong><span>{{ item.planned_start|local_dt('%d.%m.%Y') }}</span><span class="badge">{{ daypart_labels[r.daypart]|capitalize }}</span></div>
+<div class="recommendation-body"><div class="badges"><span class="badge">{{ snap.category }}</span><span class="badge">{{ snap.allocated_min }} хв</span>{% if item.status == 'canceled' %}<span class="badge">Призначення скасовано</span>{% endif %}</div>
+<h2>{{ snap.title }}</h2>
+<p class="muted">Важливість {{ snap.importance }}/5. {% if r.history_total %}Історія цієї категорії та частини доби: прийнятих призначень – {{ r.history_total }}, своєчасних завершень – {{ r.history_successes }}.{% else %}Для цієї категорії та частини доби історії поки немає.{% endif %}</p>
+<details class="score-details"><summary>Чому запропоновано цей час?</summary>
+<p>Задача вміщується у вільний час і вкладається у строк. Час обрано за пріоритетом та історією виконання.</p>
+{% if params.history_half_life_days %}<p class="help">Новіші записи мають більшу вагу.</p>{% endif %}
+<div class="score-grid"><div><span>Пріоритет задачі</span><strong>{{ '%.3f'|format(r.fuzzy_score) }}</strong></div><div><span>Оцінка історії</span><strong>{{ '%.3f'|format(r.history_score) }}</strong></div><div><span>Підсумкова оцінка</span><strong>{{ '%.3f'|format(r.score) }}</strong></div></div>
+<p class="help">Підсумок = 0,8 × пріоритет + 0,2 × історія. Оцінки потрібні для порівняння варіантів, це не відсотки успіху.</p>
+</details></div></article>
+{% else %}<section class="panel empty"><h2>Немає задач, які вдалося розмістити</h2><p class="muted">Перевірте строки задач або оберіть інший доступний період.</p></section>{% endfor %}
+</div>
+{% if params.unscheduled or params.excluded %}<section class="panel recent-plans"><h2>Задачі поза цим планом</h2><div class="table-scroll"><table><thead><tr><th>Задача</th><th>Причина</th></tr></thead><tbody>{% for task in params.unscheduled + params.excluded %}<tr><td>{{ task.title }}</td><td>{{ task.reason }}</td></tr>{% endfor %}</tbody></table></div></section>{% endif %}
+<div class="panel plan-actions">
+{% if plan.status == 'draft' %}
+<form method="post" action="{{ url_for('routes.accept_recommendations',plan_id=plan.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="button primary" type="submit" {% if problem or not plan.items %}disabled{% endif %}>Прийняти план</button></form>
+<form method="post" action="{{ url_for('routes.dismiss_recommendations',plan_id=plan.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="button" type="submit">Скасувати проєкт</button></form>
+{% else %}<a class="button primary" href="{{ url_for('routes.calendar',date=(plan.horizon_start|form_dt)[:10]) }}">Переглянути календар</a>{% endif %}
+<a class="button subtle" href="{{ url_for('routes.recommendations') }}">Сформувати новий проєкт</a>
+</div>
+<p class="help">Після зміни задач або подій сформуйте план заново.</p>
+{% endblock %}

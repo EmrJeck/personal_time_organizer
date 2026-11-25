@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Аналітика{% endblock %}
+{% block styles %}<link rel="stylesheet" href="{{ url_for('static', filename='analytics.css') }}">{% endblock %}
+{% block content %}
+<div class="page-heading"><div><p class="eyebrow">ПЛАН І ВИКОНАННЯ</p><h1>Аналітика</h1><p class="muted">Як виконуються задачі, які ви прийняли в календар.</p></div><a class="button" href="{{ url_for('routes.calendar') }}">Відкрити календар</a></div>
+<form method="get" class="panel filters analytics-filters">
+<label>Від<input type="date" name="start" value="{{ first.isoformat() }}" min="1900-01-01" max="2100-12-31" required></label>
+<label>До, включно<input type="date" name="end" value="{{ last.isoformat() }}" min="1900-01-01" max="2100-12-31" required></label>
+<button class="button primary" type="submit">Показати</button><a class="button subtle" href="{{ url_for('routes.analytics') }}">Останні 30 днів</a>
+<p class="help">Відбір за запланованим початком · {{ current_user.timezone }}<br>Станом на {{ as_of|local_dt }}</p>
+</form>
+{% if not report.planned_count %}<div class="notice"><strong>За цей період немає прийнятих призначень.</strong> Додайте задачі до календаря вручну або прийміть рекомендаційний план. Для обліку виконання використовуйте «Почати» та «Завершити».</div>{% endif %}
+<div class="analytics-stats">
+<section class="panel stat"><p>Призначень у календарі</p><strong>{{ report.planned_count }}</strong><span>Окремі спроби виконання задач</span></section>
+<section class="panel stat"><p>Завершено</p><strong>{{ report.completed_count }}</strong><span>Із призначень вибраного періоду</span></section>
+<section class="panel stat"><p>Вчасно за планом</p><strong>{% if report.on_time_percent is not none %}{{ ('%.1f'|format(report.on_time_percent))|replace('.', ',') }}<small>%</small>{% else %}–{% endif %}</strong><span>{{ report.on_time_count }} із {{ report.due_count }} минулих інтервалів</span></section>
+<section class="panel stat"><p>Заплановано часу</p><strong>{{ ('%.1f'|format(report.planned_minutes/60))|replace('.', ',') }}<small>год</small></strong><span>Повна тривалість вибраних призначень</span></section>
+</div>
+<div class="analytics-grid">
+<section class="panel"><h2>Призначення за днями</h2><p class="muted small">Завершені спроби віднесено до дня їхнього планового початку.</p>
+<div class="analytics-legend"><span><i class="planned-key"></i> Заплановано</span><span><i class="completed-key"></i> Завершено</span></div>
+{% if chart_days %}<div class="daily-chart" role="list" aria-label="Кількість запланованих і завершених призначень за днями">
+{% for row in chart_days %}<div class="daily-row" role="listitem" aria-label="{{ row.date.strftime('%d.%m.%Y') }}: заплановано {{ row.planned }}, завершено {{ row.completed }}"><span class="daily-date">{{ row.date.strftime('%d.%m.%Y') }}</span><div class="bar-pair" aria-hidden="true"><div class="bar-track"><span class="bar planned-bar" style="width:{{ 100*row.planned/chart_max }}%"></span><b>{{ row.planned }}</b></div><div class="bar-track"><span class="bar completed-bar" style="width:{{ 100*row.completed/chart_max }}%"></span><b>{{ row.completed }}</b></div></div></div>{% endfor %}
+</div><p class="help chart-note">Показано дні, у яких є призначення.</p>{% else %}<p class="empty muted">Немає даних для діаграми.</p>{% endif %}
+</section>
+<section class="panel"><h2>Дотримання планового часу</h2><p class="muted small">Лише інтервали, планове завершення яких уже минуло.</p>
+<dl class="outcome-list"><div><dt><i class="outcome-dot on-time"></i>Завершено вчасно</dt><dd>{{ report.on_time_count }}</dd></div><div><dt><i class="outcome-dot late"></i>Завершено пізніше</dt><dd>{{ report.late_count }}</dd></div><div><dt><i class="outcome-dot unrecorded"></i>Без позначки завершення</dt><dd>{{ report.unrecorded_count }}</dd></div></dl>
+<div class="recorded-time"><span>Зафіксований час між початком і завершенням</span><strong>{{ ('%.1f'|format(report.recorded_minutes/60))|replace('.', ',') }} год</strong><p class="help">{{ report.measured_count }} спроб із двома позначками часу. Перерви між натисканнями автоматично не віднімаються.</p></div>
+</section>
+</div>
+<section class="panel history-panel"><div class="history-heading"><div><h2>Історія для рекомендацій</h2><p class="muted">Усі попередні спостереження · {{ report.history_total }} спроб</p></div><span class="badge">Не обмежується фільтром дат</span></div>
+<p class="help">Новіші записи мають більшу вагу. Показник H допомагає порівнювати час для задач і не є відсотком успіху.</p>
+{% if report.history %}<div class="table-scroll"><table><caption class="sr-only">Історія своєчасності для рекомендаційного алгоритму</caption><thead><tr><th scope="col">Категорія</th><th scope="col">Частина доби</th><th scope="col">Вчасно / спроб</th><th scope="col">Показник H</th></tr></thead><tbody>{% for row in report.history %}<tr><td>{{ row.category }}</td><td>{{ row.daypart_label|capitalize }}</td><td>{{ row.successes }} / {{ row.total }}</td><td><strong>{{ ('%.3f'|format(row.score))|replace('.', ',') }}</strong></td></tr>{% endfor %}</tbody></table></div>
+{% else %}<p class="empty muted">Історії для рекомендацій ще немає. Для категорій і частин доби без спостережень алгоритм використовує нейтральний показник 0,5.</p>{% endif %}
+{% if report.ignored_history %}<p class="help">Не враховано {{ report.ignored_history }} записів із неповними параметрами історії.</p>{% endif %}
+</section>
+<details class="panel analytics-method"><summary>Як рахуються показники</summary>
+<p>Одне призначення – одна прийнята спроба виконання задачі. Повторні спроби тієї самої задачі можуть рахуватися окремо. Чернетки не враховуються. Архівування задачі не видаляє її історію.</p>
+<p>«Вчасно» означає наявність позначки завершення не пізніше запланованого кінця інтервалу. Це не оцінка дотримання загального граничного строку задачі. Для відсотка використовуються лише інтервали, які вже закінчилися.</p>
+<p>Скасування до планового початку виключаються (у вибраному періоді: {{ report.excluded_early_count }}). Скасування в момент планового початку або пізніше залишаються спробами. Відсутність позначки завершення означає відсутність запису, а не доведене невиконання роботи.</p>
+<p>Запланований час – сума повних тривалостей призначень, початок яких потрапив у вибрані дати. Події та перерви до цієї суми не входять. Зафіксований час – сума інтервалів між натисканнями «Почати» й «Завершити»; це не автоматичний вимір продуктивності.</p>
+<p>Історія рекомендацій охоплює всі доступні минулі спроби. Категорія та частина доби беруться зі збереженого призначення. Вага запису зменшується вдвічі кожні {{ report.history_half_life_days|int }} днів від його планового завершення. H = (S + 1) / (W + 2), де S – сума ваг вчасних завершень, W – сума ваг усіх спроб. У таблиці наведені звичайні кількості спроб.</p>
+</details>
+{% endblock %}

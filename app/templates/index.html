@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Мої задачі{% endblock %}
+{% block content %}
+{% if not current_user.is_authenticated %}
+<section class="hero panel"><p class="eyebrow">ПЛАНУЙТЕ СВІЙ ДЕНЬ</p><h1>Задачі та час – в одному місці</h1><p class="lead">Визначайте важливе, розподіляйте задачі в календарі та зберігайте історію виконання.</p>
+<div class="actions"><a class="button primary" href="{{ url_for('routes.login') }}">Увійти</a><a class="button" href="{{ url_for('routes.register') }}">Створити акаунт</a></div></section>
+{% else %}
+<div class="page-heading"><div><p class="eyebrow">ОСОБИСТИЙ ПРОСТІР</p><h1>{{ 'Архів задач' if archived else 'Мої задачі' }}</h1><p class="muted">Від задуму до конкретного часу в календарі.</p></div>
+<div class="actions"><a class="button" href="{{ url_for('routes.calendar') }}">Відкрити календар</a><a class="button primary" href="{{ url_for('routes.create_task') }}">+ Нова задача</a></div></div>
+<form method="get" class="panel filters">
+<label class="grow">Пошук<input name="q" value="{{ search }}" placeholder="Назва задачі"></label>
+<label>Категорія<select name="category"><option value="">Усі категорії</option>{% for c in categories %}<option value="{{ c.id }}" {% if category_id == c.id %}selected{% endif %}>{{ c.name }}</option>{% endfor %}</select></label>
+{% if archived %}<input type="hidden" name="archived" value="1">{% endif %}
+<button class="button" type="submit">Знайти</button>
+<a class="button subtle" href="{{ url_for('routes.index') if archived else url_for('routes.index', archived=1) }}">{{ 'До активних задач' if archived else 'Архів' }}</a>
+</form>
+<div class="task-list">
+{% for task in tasks %}
+<article class="panel task-row">
+<div class="task-main"><div class="badges"><span class="badge">{{ task.category.name }}</span><span class="badge {{ task.status }}">{{ {'pending':'До виконання','in_progress':'Виконується','completed':'Виконано'}[task.status] }}</span></div>
+<h2>{{ task.title }}</h2>{% if task.description %}<p class="description">{{ task.description }}</p>{% endif %}
+<p class="metadata">Важливість {{ task.importance }}/5 <span>·</span> {{ task.duration_min }} хв{% if task.earliest_start %} <span>·</span> Не раніше {{ task.earliest_start|local_dt }}{% endif %}{% if task.deadline %} <span>·</span> До {{ task.deadline|local_dt }}{% endif %}</p>
+{% if task.id in placements %}<p class="placement">У календарі: {{ placements[task.id].planned_start|local_dt }} – {{ placements[task.id].planned_end|local_dt('%H:%M') }}</p>{% endif %}
+{% if task.legacy_tags_json %}<p class="muted small">Збережені теги: {{ task.legacy_tags_json|join(', ') }}</p>{% endif %}
+</div><div class="task-actions">
+{% if archived %}<form method="post" action="{{ url_for('routes.restore_task', task_id=task.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="button" type="submit">Відновити</button></form>
+{% else %}
+{% if task.status == 'pending' %}<a class="button primary" href="{{ url_for('routes.calendar', task_id=task.id, date=(placements[task.id].planned_start|local_dt('%Y-%m-%d') if task.id in placements else (task.earliest_start|local_dt('%Y-%m-%d') if task.earliest_start else none)), _anchor='schedule') }}">{{ 'Перенести' if task.id in placements else 'Запланувати' }}</a>{% endif %}
+<form method="post" action="{{ url_for('routes.toggle_task', task_id=task.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="button" type="submit">{{ 'Повернути до виконання' if task.status == 'completed' else 'Завершити' }}</button></form>
+<a class="text-button" href="{{ url_for('routes.edit_task', task_id=task.id) }}">Редагувати</a>
+<form method="post" action="{{ url_for('routes.delete_task', task_id=task.id) }}" onsubmit="return confirm('Перенести задачу в архів? Її можна буде відновити.')"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="text-button muted" type="submit">В архів</button></form>
+{% endif %}
+</div></article>
+{% else %}<section class="panel empty"><h2>{{ 'Архів порожній' if archived else 'Задач поки немає' }}</h2><p class="muted">Створіть задачу або змініть фільтри пошуку.</p></section>{% endfor %}
+</div>
+{% endif %}
+{% endblock %}

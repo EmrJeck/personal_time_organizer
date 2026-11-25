@@ -1,0 +1,19 @@
+{
+  "source_analysis_sha256": "69e246a22b664acf82b379000161c58d352c967c97af0d46ee8b7eb73d2729f2",
+  "plot_script_sha256": "29e75db28a0d107ec791a5023ea6c9fc939e3cb2f589ab859db42593e3071016",
+  "matplotlib": "3.11.2",
+  "numpy": "2.5.4",
+  "png_dpi": 300,
+  "files": {
+    "docs\\figure_3_7_supervisor_15.png": "7460f6a6dd9d13539059a15e17661d681ed1a8b72a12d3033b17312b8de8d141",
+    "docs\\figure_3_7_supervisor_15.svg": "58b7225e297f68b5c0eb10a9d63287a477548d8200209445728d68e342d08443"
+  },
+  "intervals": "95% percentile bootstrap; generator uncertainty only",
+  "supervisor_figure_methods": [
+    "edf",
+    "importance",
+    "personalized",
+    "personalized_recent"
+  ],
+  "supervisor_history_n": 20
+}
